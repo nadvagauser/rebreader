@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "rebreader",
+  "description": "Rebread non-free sites to private front-ends",
+  "version": "1.0.0",
+  "author": "nadvagauser",
+  "homepage_url": "https://github.com/nadvagauser/rebreader",
+
+  "permissions": ["webRequest", "webRequestBlocking", "storage", "<all_urls>"],
+  "background": {
+    "scripts": ["src/background.js"]
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "rebreader@nadvagauser.github.io",
+      "strict_min_version": "75.0"
+    }
+  }  
+}

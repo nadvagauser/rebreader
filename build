@@ -1,0 +1,24 @@
+#!/bin/sh
+# Written and tested on a stock Alpine 3.16
+# Please refer to README.md for requirements
+
+set -e pipefail
+
+echo [build] checking dependencies
+dependencies='jq sed cat zip'
+for dependency in $dependencies
+do
+  if ! type $dependency > /dev/null
+  then
+    echo [build] \'$dependency\' missing! Please install
+    exit 1
+  fi
+done
+
+echo [build] building $(jq -rM '.name' manifest.json) version $(jq -rM '.version' manifest.json)
+
+./scripts/gen-dictionary
+./scripts/gen-services-table
+./scripts/pack
+
+echo [build] completed

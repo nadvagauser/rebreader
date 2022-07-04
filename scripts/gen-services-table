@@ -1,0 +1,19 @@
+#!/bin/sh
+# Written and tested on a stock Alpine 3.16
+# Requirements:
+# - jq
+# - sed
+
+set -e pipefail
+
+# Prepare space for the generated table
+sed '/^<!--service-table-start-->/,/^<!--service-table-end-->$/{/^<!--/!d;}' -i README.md
+
+# And generate the table
+cat << EOF | sed '/^<!--service-table-start-->$/ r /dev/stdin' -i README.md
+| Service | Front-end |
+| ------- | --------- |
+`jq -rS 'keys[] as $k | "| [\($k)](https://\($k)/) | [\(.[$k])](https://\(.[$k])/) |"' data/services.json`
+EOF
+
+echo [scripts/gen-services-table] updated README.md services table

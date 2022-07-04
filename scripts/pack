@@ -1,0 +1,16 @@
+#!/bin/sh
+# Written and tested on a stock Alpine 3.16
+# Requirements:
+# - jq
+# - zip
+
+set -e pipefail
+
+mkdir -p dist
+
+archive_name=`jq -r '"\(.name)-firefox-\(.version)"' manifest.json`
+zip -0 -r "dist/$archive_name.zip" . \
+  -x '.git/*' -x 'scripts/*' -x 'dist/*' -x 'data/*' \
+  -x '.gitignore' -x 'build'
+
+echo [scripts/pack] zipped the extension to dist/$archive_name.zip
