@@ -1,0 +1,14 @@
+#!/bin/sh
+# Written and tested on a stock Alpine 3.16
+# Requirements:
+# - jq
+# - zip
+
+set -e pipefail
+
+mkdir -p dist
+
+archive_name=`jq -r '"\(.name)-firefox-\(.version)-src"' manifest.json`
+zip -0 -r "dist/$archive_name.zip" . -x '.git/*' -x 'dist/*'
+
+echo [scripts/zip-for-review] zipped the source code to dist/$archive_name.zip
