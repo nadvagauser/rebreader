@@ -3,11 +3,11 @@ Redirects various non-free services to more private and lighter alternative
 front-ends.
 
 ## Supported services
-Below is a hopefully up-to-date[^hopefully] list of them. You can always [check the
-source](./data/services.json)! These are the 'primary services', meaning primary
-official domains for given services. Please refer to the
-[`data/instances.json`](./data/instances.json) file for a list of supported instances
-of these services.
+Below is a hopefully up-to-date[^hopefully] list of them. You can always [check
+the source](./data/services.json)! These are the 'primary services', meaning
+primary official domains for given services. Please refer to the
+[`data/instances.auto.json`](./data/instances.auto.json) file for a list of supported
+instances of these services.
 
 [^hopefully]: We[^please-help] try to regenerate it with a pre-commit hook...
 [^please-help]: 'We' because You can contribute too hehehe
@@ -28,20 +28,21 @@ of these services.
 We tried our best..
 
 Before a request is made, its details get passed to the extension, which then
-attempts to redirect it. Thanks to the WebRequests API, only websites matching the
-provided filter are processed, so the performance impact should be relatively small.
+attempts to redirect it. Thanks to the WebRequests API, only websites matching
+the provided filter are processed, so the performance impact should be
+relatively small.
 
-After the browser makes any request, the extension attempts to check if it, by any
-chance, hasn't let some service through. It checks the respones headers in the
-background, without blocking anything. Computers nowadays are pretty powerful, so it
-shouldn't hurt your processor that much 😅
+After the browser makes any request, the extension attempts to check if it, by
+any chance, hasn't let some service through. It checks the respones headers in
+the background, without blocking anything. Computers nowadays are pretty
+powerful, so it shouldn't hurt your processor too much 😅
 
 (Not taking any resposnsibility for the power consumption though)
 
 ## Required permissions
-We need access to WebRequests on all hosts as the self-improving discovery feature
-relies on it. You can always review the source code of the extension, we tried to
-explain a lot of stuff in comments.
+We need access to WebRequests on all hosts as the self-improving discovery
+feature relies on it. You can always review the source code of the extension, we
+tried to explain a lot of stuff in comments.
 
 ## Development
 ### Requirements
@@ -70,18 +71,23 @@ Everything is tested on a stock Alpine 3.16 with just `apk add jq zip`.
 dist/rebreader-firefox-1.0.0.zip: Zip archive data, at least v1.0 to extract, compression method=store
 ```
 
+You can also generate [`data/instances.auto.json`](./data/instances.auto.json)
+by running [`scripts/populate-instances`]. It merges the manually-written
+[`data/instances.json`](./data/instances.json) with data fetched from various
+`instance.json` files exposed by certain services.
+
 ### Adding new services
 - [`data/services.json`](./data/services.json) - redirections for primary services
-- [`data/instances.json`](./data/instances.json) - redirections for instances (other
-  front-ends, mirrors, alternate domains, shortlinks)
+- [`data/instances.json`](./data/instances.json) - redirections for instances (other front-ends, mirrors, alternate domains, shortlinks)
+- [`data/instances.auto.json`](./data/instances.auto.json) - file used by [`scripts/gen-dictionary`](./scripts/gen-dictionary) to generate [`src/dictionary.js`](./src/dictionary.js). It's auto-generated, please use [`data/instances.json`](./data/instances.json) instead
 
 ## Assistance or questions
 You can either [create an Issue](https://github.com/nadvagauser/rebreader/issues/new)
 or [send me an e-mail](mailto:nadvagauser+rebreader@proton.me).
 
 ## Various ideas for later (not-a-todo-list)
-- Generate something like `data/instances.auto.json` from APIs and files exposed by
-  various front-ends and merge it with `data/instances.json`?
+- Generate something like `data/instances.auto.json` from APIs and files exposed
+  by various front-ends and merge it with `data/instances.json`?
 - Don't redirect certain services if the user is authenticated?
 - Editor for the local dictionary?
 - Collaboration on the dictionary through some kind of a syncing service?

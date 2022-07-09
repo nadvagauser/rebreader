@@ -1,0 +1,28 @@
+#!/bin/sh
+# Written and tested on a stock Alpine 3.16
+# Requirements:
+# - jq
+# - either wget or curl
+
+set -e pipefail
+
+downloader=''
+if type 'wget'
+then
+  downloader='wget -qO -'
+elif type 'curl'
+then
+  downloader='curl -s'
+else
+  echo "[build] Please make sure either wget '(busybox supported)' or curl is available"
+  exit 1
+fi
+
+individious_instances=$(
+  $downloader 'https://api.invidious.io/instances.json?pretty=0' \
+  | jq -rMS --indent 2 '[.[] | select(.[0] | endswith(".onion") | not) | {(.[0]): "piped.kavin.rocks"}] | add'
+)
+
+jq -s '.[0] * .[1]' data/instances.json <(echo $individious_instances) > data/instances.auto.json
+
+echo "[scripts/populate-instances] (re-)populated data/instances.auto.json"
