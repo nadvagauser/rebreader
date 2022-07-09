@@ -8,9 +8,9 @@ set -e pipefail
 
 mkdir -p dist
 
+allow_list='src/ README.md LICENSE manifest.json'
 archive_name=`jq -r '"\(.name)-firefox-\(.version)"' manifest.json`
-zip -0 -r "dist/$archive_name.zip" . \
-  -x '.git/*' -x 'scripts/*' -x 'dist/*' -x 'data/*' \
-  -x '.gitignore' -x 'build'
+
+zip -0 -r "dist/$archive_name.zip" $allow_list
 
 echo [scripts/pack] zipped the extension to dist/$archive_name.zip
