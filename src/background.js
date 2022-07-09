@@ -93,6 +93,13 @@ async function attemptRedirecting(details) {
     case 'jobs.medium.com':
       return {}
   }
+  // This is probably going to need some additional work soon, as we discover
+  // more edge-cases benefitting from a simple pattern-matching in dictionaries.
+  // However, Medium alredy has to be handled as a special case in
+  // reviewHeaders().
+  if (pureHostname.endsWith('medium.com')) {
+    pureHostname = 'medium.com'
+  }
   }
 
   // Baseline, as most front-ends are 'drop-in replacements' considering the URLs
