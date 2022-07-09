@@ -3,12 +3,13 @@
 # Requirements:
 # - jq
 # - zip
+# - git
 
 set -e pipefail
 
 mkdir -p dist
 
 archive_name=`jq -r '"\(.name)-firefox-\(.version)-src"' manifest.json`
-zip -0 -r "dist/$archive_name.zip" . -x '.git/*' -x 'dist/*'
+git archive --format zip --output "dist/$archive_name.zip" HEAD
 
 echo [scripts/zip-for-review] zipped the source code to dist/$archive_name.zip
