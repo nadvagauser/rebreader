@@ -93,6 +93,7 @@ async function attemptRedirecting(details) {
     case 'jobs.medium.com':
       return {}
   }
+
   // This is probably going to need some additional work soon, as we discover
   // more edge-cases benefitting from a simple pattern-matching in dictionaries.
   // However, Medium alredy has to be handled as a special case in
@@ -100,6 +101,7 @@ async function attemptRedirecting(details) {
   if (pureHostname.endsWith('medium.com')) {
     pureHostname = 'medium.com'
   }
+
   // Dictionary miss for some reason
   if (pureHostname in redirects === false) {
     console.warn(`[${pureHostname}]`, `Dictionary miss: ${details.url}`)
@@ -149,6 +151,9 @@ async function reviewHeaders(details) {
   const pureHostname = url.hostname.startsWith('www.')
     ? url.hostname.slice(4)
     : url.hostname
+
+  // Filter out known websites
+  if (pureHostname in redirects) return
 
   // Medium thankfully introduces itself every time. There are other
   // 'footprints' in case these headers get removed.
