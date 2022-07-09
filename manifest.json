@@ -7,7 +7,7 @@
   "author": "nadvagauser",
   "homepage_url": "https://github.com/nadvagauser/rebreader",
 
-  "permissions": ["webRequest", "webRequestBlocking", "storage", "<all_urls>"],
+  "permissions": ["webRequest", "webRequestBlocking", "storage", "<all_urls>", "tabs"],
   "background": {
     "scripts": ["src/background.js"]
   },
