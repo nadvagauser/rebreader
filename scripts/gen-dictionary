@@ -10,7 +10,7 @@ cat > ./src/dictionary.js << EOF
 // Take a look at scripts/gen-dictionary
 export const base = $(jq -rMS --indent 2 . data/services.json | sed $'s/"/\'/g')
 
-export const instances = $(jq -rMS --indent 2 . data/instances.json | sed $'s/"/\'/g')
+export const instances = $(jq -rMS --indent 2 . data/instances.auto.json | sed $'s/"/\'/g')
 
 EOF
 
