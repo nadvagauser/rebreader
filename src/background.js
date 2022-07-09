@@ -81,12 +81,18 @@ async function attemptRedirecting(details) {
     ? url.hostname.slice(4)
     : url.hostname
 
-  // (Hopefully temporary) Workaround for Beatbump, as it unfortunately doesn't
-  // support YouTube playlists URLs yet. We could redirect them to URLs
-  // supported by Beatbump by extracting Album's ID from the URL, but Piped
-  // works fine too. For now this should be enough
-  if ((url.hostname + url.pathname) === 'music.youtube.com/playlist') {
-    pureHostname = 'youtube.com'
+  switch (pureHostname) {
+    // (Hopefully temporary) Workaround for Beatbump, as it unfortunately doesn't
+    // support YouTube playlists URLs yet. We could redirect them to URLs
+    // supported by Beatbump by extracting Album's ID from the URL, but Piped
+    // works fine too. For now this should be enough.
+    case 'music.youtube.com':
+      if (url.pathname === '/playlist') {
+        pureHostname = 'youtube.com'
+      }
+    case 'jobs.medium.com':
+      return {}
+  }
   }
 
   // Baseline, as most front-ends are 'drop-in replacements' considering the URLs
