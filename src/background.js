@@ -138,13 +138,11 @@ async function attemptRedirecting(details) {
 // - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
 browser.webRequest.onHeadersReceived.addListener(
   reviewHeaders,
-  { urls: ["<all_urls>"] },
+  { urls: ["<all_urls>"], types: resourceTypes},
   ["responseHeaders"]
 )
 
 async function reviewHeaders(details) {
-  if (!resourceTypes.includes(details.type)) return
-
   const url = new URL(details.url)
   const headers = new Headers(details.responseHeaders.map(h => [h.name, h.value ?? h.binaryValue]))
 
