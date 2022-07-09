@@ -127,8 +127,8 @@ async function attemptRedirecting(details) {
 //
 // Hopefully headers will be enough.
 //
-// TODO: Would be nice to redirect a newly-indentified instance right after too!
-// This might be possible by utilizing the Tabs API?
+// If the extension discovers a new instance of a given service, it attempts to
+// reload the website using `TabsAPI#reload()`.
 //
 // TODO: reviewHeaders() might benefit from splitting it into separate
 // functions/modules, but for now it should be fine, as we don't have much
@@ -136,6 +136,7 @@ async function attemptRedirecting(details) {
 //
 // Relevant documentation:
 // - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
+// - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/reload
 browser.webRequest.onHeadersReceived.addListener(
   reviewHeaders,
   { urls: ["<all_urls>"], types: resourceTypes},
@@ -145,6 +146,7 @@ browser.webRequest.onHeadersReceived.addListener(
 async function reviewHeaders(details) {
   const url = new URL(details.url)
   const headers = new Headers(details.responseHeaders.map(h => [h.name, h.value ?? h.binaryValue]))
+  let discovered = false
 
   const pureHostname = url.hostname.startsWith('www.')
     ? url.hostname.slice(4)
@@ -162,6 +164,14 @@ async function reviewHeaders(details) {
   ) {
     console.log(`Identified a new Medium instance: ${url.hostname}`)
     redirects[pureHostname] = redirects['medium.com']
+    discovered = true
+  }
+
+  if (discovered) {
     browser.storage.local.set({ redirects })
+    // tabId is equal to -1 if the request is not 'a tab'
+    if (details.tabId !== -1) {
+      browser.tabs.reload(details.tabId)
+    }
   }
 }
