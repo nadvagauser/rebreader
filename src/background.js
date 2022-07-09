@@ -100,6 +100,10 @@ async function attemptRedirecting(details) {
   if (pureHostname.endsWith('medium.com')) {
     pureHostname = 'medium.com'
   }
+  // Dictionary miss for some reason
+  if (pureHostname in redirects === false) {
+    console.warn(`[${pureHostname}]`, `Dictionary miss: ${details.url}`)
+    return {}
   }
 
   // Baseline, as most front-ends are 'drop-in replacements' considering the URLs
