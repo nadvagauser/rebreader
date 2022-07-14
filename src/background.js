@@ -39,6 +39,7 @@ browser.storage.onChanged.addListener(loadRedirects)
 // records.
 async function loadRedirects() {
   redirects = (await browser.storage.local.get()).redirects
+  requestFilter = []
   for (let host in redirects) {
     requestFilter.push(`*://*.${host}/*`)
   }
