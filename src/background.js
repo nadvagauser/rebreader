@@ -175,3 +175,6 @@ async function reviewHeaders(details) {
     }
   }
 }
+
+// Make-believe `browser.runtime.onLoad` event
+loadRedirects()
